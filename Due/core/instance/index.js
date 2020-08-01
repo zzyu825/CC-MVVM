@@ -1,4 +1,5 @@
-import _init from './init.js'
+import _init from './init.js';
+import {initMount} from './mount.js';
 
 class Due {
     constructor(options) {
@@ -7,5 +8,6 @@ class Due {
 }
 
 _init(Due);
+initMount(Due);
 
 export default Due;

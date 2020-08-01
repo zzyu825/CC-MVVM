@@ -1,4 +1,5 @@
 import constructProxy from './proxy.js';
+import mount from './mount.js';
 
 let uid = 0;
 
@@ -20,5 +21,9 @@ export default function _init(Due) {
         // 初始化methods
         // 初始化computed
         // 初始化el并挂载
+        if (options && options.el) {
+            const rootDom = document.getElementById(options.el);
+            mount(this, rootDom);
+        }
     }
 }
