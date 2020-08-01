@@ -1,11 +1,21 @@
+import constructProxy from './proxy.js';
+
 let uid = 0;
 
-export default Due => {
+/**
+ * 初始化
+ * @export
+ * @param {*} Due 实例
+ */
+export default function _init(Due) {
     Due.prototype.init = function (options) {
         this.uid = uid ++; // uid属性保证Due实例唯一
         this._isDue = true; // 是否是Due实例
 
         // 初始化data
+        if (options && options.data) {
+            this._data = constructProxy(this, options.data, '');
+        }
         // 初始化created
         // 初始化methods
         // 初始化computed
