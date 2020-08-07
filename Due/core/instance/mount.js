@@ -1,10 +1,13 @@
 import VNode from "../vdom/vnode.js";
-
+import render from './render.js'
 // 挂载函数
 export default function mount(vm, el) {
     // 进行挂载
     vm._vnode = constructVNode(vm, el, null);
-    // 进行预备渲染
+    // 进行预备渲染（建立渲染索引、通过模板找vnode、通过vnode找模板）
+    render.prepareRender(vm, vm._vnode);
+    // console.log(render.template2Vnode);
+    // console.log(render.vnode2Template);
 }
 
 // $mount实现

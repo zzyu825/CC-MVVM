@@ -8,8 +8,8 @@ let uid = 0;
  * @export
  * @param {*} Due 实例
  */
-export default function _init(Due) {
-    Due.prototype.init = function (options) {
+export default function init(Due) {
+    Due.prototype._init = function (options) {
         this.uid = uid ++; // uid属性保证Due实例唯一
         this._isDue = true; // 是否是Due实例
 

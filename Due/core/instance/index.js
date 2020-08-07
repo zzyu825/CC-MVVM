@@ -1,13 +1,16 @@
-import _init from './init.js';
-import {initMount} from './mount.js';
+import init from './init.js';
+import { initMount } from './mount.js';
+import render from './render.js';
 
 class Due {
     constructor(options) {
-        this.init(options);
+        this._init(options);
+        this._render();
     }
 }
 
-_init(Due);
+init(Due);
 initMount(Due);
+render.render(Due);
 
 export default Due;

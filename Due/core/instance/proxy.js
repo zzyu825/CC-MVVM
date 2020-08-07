@@ -1,3 +1,5 @@
+import render from './render.js';
+
 // 通过代理的方式实现监听属性修改
 function constructObjectProxy(vm, target, namespace) {
     let proxyObj = {}; // 观察者
@@ -9,21 +11,25 @@ function constructObjectProxy(vm, target, namespace) {
                 return target[prop];
             },
             set(val) {
-                console.log(getNamespace(namespace, prop));
+                // console.log(getNamespace(namespace, prop));
                 target[prop] = val;
+                render.renderData(vm, getNamespace(namespace, prop));
             }
         });
-        // 代理给Due实例自身
-        Object.defineProperty(vm, prop, {
-            configurable: true,
-            get() {
-                return target[prop];
-            },
-            set(val) {
-                console.log(getNamespace(namespace, prop));
-                target[prop] = val;
-            }
-        });
+        if (namespace === '') {
+            // 代理给Due实例自身
+            Object.defineProperty(vm, prop, {
+                configurable: true,
+                get() {
+                    return target[prop];
+                },
+                set(val) {
+                    // console.log(getNamespace(namespace, prop));
+                    target[prop] = val;
+                    render.renderData(vm, getNamespace(namespace, prop));
+                }
+            }); 
+        }
         // 嵌套代理
         if (target[prop] instanceof Object) {
             proxyObj[prop] = constructProxy(vm, target[prop], getNamespace(namespace, prop));
@@ -43,10 +49,10 @@ function proxyArr(vm, arr, namespace) {
             }
             return result.substring(0, arr.length - 2);
         },
-        push() {},
-        unshift() {},
-        pop() {},
-        shift() {}
+        push() { },
+        unshift() { },
+        pop() { },
+        shift() { }
     };
     defArrayFunc.call(vm, obj, 'push', namespace, vm);
     defArrayFunc.call(vm, obj, 'unshift', namespace, vm);
@@ -65,7 +71,8 @@ function defArrayFunc(obj, type, namespace, vm) {
         configurable: true,
         value(...args) {
             const result = arrProto[type].apply(this, args);
-            console.log(getNamespace(namespace, ''))
+            // console.log(getNamespace(namespace, ''))
+            render.renderData(vm, getNamespace(namespace, prop));
             return result;
         }
     });
@@ -101,7 +108,7 @@ export default function constructProxy(vm, target, namespace) {
         proxy = new Array(target.length);
         // 每一个子元素代理
         target.forEach((ele, i) => {
-            proxy[i] = constructProxy(vm, ele, namespace); 
+            proxy[i] = constructProxy(vm, ele, namespace);
         });
         // 数组本身代理
         proxy = proxyArr(vm, target, namespace);
